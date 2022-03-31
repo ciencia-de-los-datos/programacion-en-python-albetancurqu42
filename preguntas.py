@@ -11,6 +11,18 @@ Utilice el archivo `data.csv` para resolver las preguntas.
 
 
 """
+import csv
+import re
+
+
+def read_csv():
+    with open("data.csv", 'r') as file:
+        csv_file = csv.reader(file, delimiter='¿')
+        data_list = []
+        for line in csv_file:
+            data_list.append(re.split('\t|,', line[0]))
+
+    return data_list
 
 
 def pregunta_01():
@@ -21,7 +33,15 @@ def pregunta_01():
     214
 
     """
-    return
+
+    data = read_csv()
+
+    sum = 0
+
+    for ii in data:
+        sum = sum + int(ii[1])
+
+    return sum
 
 
 def pregunta_02():
@@ -39,7 +59,12 @@ def pregunta_02():
     ]
 
     """
-    return
+
+    data = read_csv()
+
+    line = [ii[0] for ii in data]
+
+    return [tuple([l, line.count(l)]) for l in sorted(list(set(line)))]
 
 
 def pregunta_03():
@@ -57,7 +82,17 @@ def pregunta_03():
     ]
 
     """
-    return
+
+    data = read_csv()
+
+    line = [[ii[0], ii[1]] for ii in data]
+
+    dict_count = {l:0 for l in sorted(list(set(line)))}
+
+    for ii in line:
+        dict_count[ii[0]] = dict_count[ii[0]] + int(ii[1])
+
+    return [(k, v) for k, v in dict_count.items()]
 
 
 def pregunta_04():
