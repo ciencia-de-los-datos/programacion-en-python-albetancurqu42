@@ -392,4 +392,4 @@ def pregunta_12():
 
         dict_count[key] += result
 
-    return
+    return dict_count
