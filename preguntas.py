@@ -11,6 +11,18 @@ Utilice el archivo `data.csv` para resolver las preguntas.
 
 
 """
+import csv
+import re
+
+
+def read_csv(spliter='\t|,'):
+    with open("data.csv", 'r') as file:
+        csv_file = csv.reader(file, delimiter='¿')
+        data_list = []
+        for line in csv_file:
+            data_list.append(re.split(spliter, line[0]))
+
+    return data_list
 
 
 def pregunta_01():
@@ -21,7 +33,15 @@ def pregunta_01():
     214
 
     """
-    return
+
+    data = read_csv()
+
+    sum = 0
+
+    for ii in data:
+        sum = sum + int(ii[1])
+
+    return sum
 
 
 def pregunta_02():
@@ -39,7 +59,12 @@ def pregunta_02():
     ]
 
     """
-    return
+
+    data = read_csv()
+
+    line = [ii[0] for ii in data]
+
+    return [tuple([l, line.count(l)]) for l in sorted(list(set(line)))]
 
 
 def pregunta_03():
@@ -57,7 +82,18 @@ def pregunta_03():
     ]
 
     """
-    return
+
+    data = read_csv()
+
+    line = [[ii[0], ii[1]] for ii in data]
+    keys = sorted(set([ii[0] for ii in data]))
+
+    dict_count = {l: 0 for l in keys}
+
+    for ii in line:
+        dict_count[ii[0]] = dict_count[ii[0]] + int(ii[1])
+
+    return [(k, v) for k, v in dict_count.items()]
 
 
 def pregunta_04():
@@ -82,7 +118,12 @@ def pregunta_04():
     ]
 
     """
-    return
+
+    data = read_csv()
+
+    line = [ii[2].split('-')[1] for ii in data]
+
+    return [tuple([l, line.count(l)]) for l in sorted(list(set(line)))]
 
 
 def pregunta_05():
@@ -100,7 +141,18 @@ def pregunta_05():
     ]
 
     """
-    return
+
+    data = read_csv()
+
+    line = [[ii[0], ii[1]] for ii in data]
+    keys = sorted(set([ii[0] for ii in data]))
+
+    dict_count = {l: [] for l in keys}
+
+    for [ii, jj] in line:
+        dict_count[ii].append(int(jj))
+
+    return [(k, max(v), min(v)) for k, v in dict_count.items()]
 
 
 def pregunta_06():
@@ -125,7 +177,23 @@ def pregunta_06():
     ]
 
     """
-    return
+
+    data = read_csv()
+
+    line = []
+
+    for ii in data:
+        line = line + [jj for jj in ii if ':' in jj]
+
+    line = [jj.split(':') for jj in line]
+    keys = sorted(set([ii[0] for ii in line]))
+
+    dict_count = {l: [] for l in keys}
+
+    for [ii, jj] in line:
+        dict_count[ii].append(int(jj))
+
+    return [(k, min(v), max(v)) for k, v in dict_count.items()]
 
 
 def pregunta_07():
@@ -149,7 +217,17 @@ def pregunta_07():
     ]
 
     """
-    return
+    data = read_csv()
+
+    line = [[ii[0], ii[1]] for ii in data]
+    keys = sorted(set([int(ii[1]) for ii in data]))
+
+    dict_count = {l: [] for l in keys}
+
+    for [ii, jj] in line:
+        dict_count[int(jj)].append(ii)
+
+    return [(k, v) for k, v in dict_count.items()]
 
 
 def pregunta_08():
@@ -174,7 +252,17 @@ def pregunta_08():
     ]
 
     """
-    return
+    data = read_csv()
+
+    line = [[ii[0], ii[1]] for ii in data]
+    keys = sorted(set([int(ii[1]) for ii in data]))
+
+    dict_count = {l: [] for l in keys}
+
+    for [ii, jj] in line:
+        dict_count[int(jj)].append(ii)
+
+    return [(k, sorted(set(v))) for k, v in dict_count.items()]
 
 
 def pregunta_09():
@@ -197,7 +285,23 @@ def pregunta_09():
     }
 
     """
-    return
+
+    data = read_csv()
+
+    line = []
+
+    for ii in data:
+        line = line + [jj for jj in ii if ':' in jj]
+
+    line = [jj.split(':') for jj in line]
+    keys = sorted(set([ii[0] for ii in line]))
+
+    dict_count = {l: [] for l in keys}
+
+    for [ii, jj] in line:
+        dict_count[ii].append(int(jj))
+
+    return {k: len(v) for k, v in dict_count.items()}
 
 
 def pregunta_10():
@@ -218,7 +322,9 @@ def pregunta_10():
 
 
     """
-    return
+    data = read_csv(spliter='\t')
+
+    return [(ii[0], len(ii[3].split(',')), len(ii[4].split(','))) for ii in data]
 
 
 def pregunta_11():
@@ -239,7 +345,22 @@ def pregunta_11():
 
 
     """
-    return
+    data = read_csv(spliter='\t')
+
+    keys = [ii[3].split(',') for ii in data]
+
+    keys = sorted(set([jj for sub in keys for jj in sub]))
+
+    dict_count = {l: 0 for l in keys}
+
+    for line in data:
+        number = int(line[1])
+        letters = line[3].split(',')
+
+        for l in letters:
+            dict_count[l] += number
+
+    return dict_count
 
 
 def pregunta_12():
@@ -257,4 +378,18 @@ def pregunta_12():
     }
 
     """
-    return
+    data = read_csv(spliter='\t')
+
+    keys = sorted(set([ii[0] for ii in data]))
+
+    dict_count = {l: 0 for l in keys}
+
+    for line in data:
+        key = line[0]
+        numbers = line[4].split(',')
+        numbers = [ii.split(':') for ii in numbers]
+        result = sum([int(ii[1]) for ii in numbers])
+
+        dict_count[key] += result
+
+    return dict_count
