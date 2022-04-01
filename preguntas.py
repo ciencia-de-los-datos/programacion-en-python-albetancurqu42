@@ -150,7 +150,6 @@ def pregunta_05():
     dict_count = {l: [] for l in keys}
 
     for [ii, jj] in line:
-
         dict_count[ii].append(int(jj))
 
     return [(k, max(v), min(v)) for k, v in dict_count.items()]
@@ -184,7 +183,6 @@ def pregunta_06():
     line = []
 
     for ii in data:
-
         line = line + [jj for jj in ii if ':' in jj]
 
     line = [jj.split(':') for jj in line]
@@ -347,7 +345,22 @@ def pregunta_11():
 
 
     """
-    return
+    data = read_csv(spliter='\t')
+
+    keys = [ii[3].split(',') for ii in data]
+
+    keys = sorted(set([jj for sub in keys for jj in sub]))
+
+    dict_count = {l: 0 for l in keys}
+
+    for line in data:
+        number = int(line[1])
+        letters = line[3].split(',')
+
+        for l in letters:
+            dict_count[l] += number
+
+    return dict_count
 
 
 def pregunta_12():
@@ -365,4 +378,18 @@ def pregunta_12():
     }
 
     """
+    data = read_csv(spliter='\t')
+
+    keys = sorted(set([ii[0] for ii in data]))
+
+    dict_count = {l: 0 for l in keys}
+
+    for line in data:
+        key = line[0]
+        numbers = line[4].split(',')
+        numbers = [ii.split(':') for ii in numbers]
+        result = sum([int(ii[1]) for ii in numbers])
+
+        dict_count[key] += result
+
     return
